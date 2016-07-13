@@ -15,14 +15,22 @@ describe('Insert Note', function() {
       '.insereNovaNota-campo'.should.be.inDOM.and.be.visible
     })
   })  
+  
+  describe('Test insert new note', function(){
+    before(function(){
+      casper.sendKeys('textarea', 'aaa')  
+    })
 
-  it('deve inserir um dado no textarea', function() {
-    casper.sendKeys('textarea', 'aaa') 
-    expect('textarea').to.have.fieldValue('aaa')
+    it('deve adicionar uma nova nota', function() {
+      casper.click('.insereNovaNota-envia')
+      expect('.nota-conteudo').to.have.text('aaa')
+    }) 
+
+   it('deve remover a nota', function() {
+     casper.click('.button-remove')
+     ".mural".should.not.have.tagName('button')
+   })
+    
   })
 
-  it('deve adicionar uma nova nota', function() {
-    casper.click('.insereNovaNota-envia')
-    expect('.nota-conteudo').to.have.text('aaa')
-  })
 })
