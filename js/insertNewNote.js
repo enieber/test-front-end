@@ -1,50 +1,51 @@
-var campo = document.querySelector('.insereNovaNota-campo')
-var mural = document.querySelector('.mural')
+'use strict'
 
+var buttonNewNote = document.querySelector('.insereNovaNota')
+ 
+function insertNewNote(buttonNewNote) {
+  buttonNewNote.addEventListener('submit', function (event) {
+    var textArea = document.querySelector('.insereNovaNota-campo')
+    var mural = document.querySelector('.mural')
+    var content = textArea.value.trim()
 
-if (!String.prototype.trim) {
-  (function() {
-    // Make sure we trim BOM and NBSP
-  var rtrim = /^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g;
-  String.prototype.trim = function() {
-    return this.replace(rtrim, '');
-  };
-  })();
-}
-
-document.querySelector('.insereNovaNota').addEventListener('submit', function (event) {
-  var conteudo = campo.value.trim()
-  if (conteudo.length == 0) {
-    event.preventDefault()
-    campo.value = ''
-    return
-  }
+    if (content.length == 0) {
+      event.preventDefault()
+      textArea.value = ''
+      return
+    }
     
-  createNote(conteudo)
-  campo.value = ''
-  event.preventDefault()
-})
-
-function createNote(conteudo){
-  var nota = document.createElement('div')
-  nota.classList.add('nota')
-
-  var menu = document.createElement('div')
-  var botaoRemove = document.createElement('button')
-  botaoRemove.setAttribute('class', 'button-remove')
-  botaoRemove.textContent = 'Remove'
-  botaoRemove.addEventListener('click', function () {
-    nota.classList.add('nota--sumindo')
-    nota.remove()
+    var note = createNote(content)
+    mural.appendChild(note) 
+    textArea.value = ''
+    event.preventDefault()
   })
-
-  menu.appendChild(botaoRemove)
-  nota.appendChild(menu)
-
-  var notaConteudo = document.createElement('p')
-  notaConteudo.classList.add('nota-conteudo')
-  notaConteudo.textContent = conteudo
-  
-  nota.appendChild(notaConteudo)
-  mural.appendChild(nota) 
 }
+
+function createNote(content){
+  var note = document.createElement('div')
+  var buttonRemove = document.createElement('button')
+  var noteContent = document.createElement('p')
+
+  //create Note
+  note.classList.add('nota')
+  noteContent.classList.add('nota-conteudo')
+  noteContent.textContent = content
+  note.appendChild(noteContent)
+
+  //create buttonRemove
+  buttonRemove.setAttribute('class', 'button-remove')
+  buttonRemove.textContent = 'Remove'
+
+  //add button in note
+  note.appendChild(buttonRemove)
+
+  //add linstener in button
+  buttonRemove.addEventListener('click', function () {
+    note.classList.add('nota--sumindo')
+    note.remove()
+  })
+    
+  return note 
+}
+
+insertNewNote(buttonNewNote)
